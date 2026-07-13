@@ -1,280 +1,786 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>우리가족 용돈기입장</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>그래 작은 도서관</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #faf6ef;
+      --cream-dark: #f0e9dc;
+      --sage: #7a9e7e;
+      --sage-light: #a8c5ab;
+      --sage-dark: #5a7e5e;
+      --terracotta: #c1694f;
+      --terracotta-light: #d98c78;
+      --terracotta-dark: #a0503a;
+      --text-dark: #3a2e28;
+      --text-mid: #6b5a50;
+      --text-light: #9e8878;
+      --card-bg: #fffdf8;
+      --shadow: 0 2px 12px rgba(58,46,40,0.08);
+      --shadow-lg: 0 6px 24px rgba(58,46,40,0.13);
+      --radius: 14px;
+      --radius-sm: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: 'Gowun Batang', serif;
+      background-color: var(--cream);
+      color: var(--text-dark);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--cream);
+      border-bottom: 1.5px solid var(--cream-dark);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(58,46,40,0.06);
+    }
+
+    .header-left { display: flex; align-items: center; gap: 10px; }
+    .header-logo { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--sage-light); }
+    .header-logo-placeholder { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--sage), var(--terracotta)); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .header-title { display: flex; flex-direction: column; }
+    .header-title .sub { font-size: 10px; color: var(--text-light); letter-spacing: 0.05em; }
+    .header-title .main { font-size: 16px; font-weight: 700; color: var(--text-dark); line-height: 1.2; }
+    .btn-admin { background: none; border: none; font-size: 22px; cursor: pointer; padding: 4px 8px; border-radius: var(--radius-sm); transition: background 0.15s; line-height: 1; }
+    .btn-admin:active { background: var(--cream-dark); }
+
+    /* ─── SEARCH AREA ─── */
+    .search-wrap { padding: 14px 16px 10px; background: var(--cream); position: sticky; top: 65px; z-index: 90; border-bottom: 1px solid var(--cream-dark); }
+    .search-row { display: flex; gap: 8px; align-items: center; }
+    .search-input-wrap { flex: 1; position: relative; }
+    .search-input { width: 100%; padding: 10px 14px 10px 38px; border: 1.5px solid var(--cream-dark); border-radius: 30px; font-family: 'Gowun Batang', serif; font-size: 15px; background: var(--card-bg); color: var(--text-dark); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .search-input:focus { border-color: var(--sage); box-shadow: 0 0 0 3px rgba(122,158,126,0.12); }
+    .search-input::placeholder { color: var(--text-light); }
+    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-light); font-size: 15px; pointer-events: none; }
+    .btn-filter { flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid var(--cream-dark); background: var(--card-bg); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; line-height: 1; }
+    .btn-filter.active { background: var(--sage); border-color: var(--sage); }
+    .btn-filter:active { opacity: 0.7; }
+
+    /* ─── FILTER PANEL ─── */
+    .filter-panel { display: none; padding: 10px 0 0; }
+    .filter-panel.open { display: block; }
+    .filter-panel-inner { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .filter-search-wrap { flex: 1; min-width: 0; position: relative; }
+    .filter-input { width: 100%; padding: 9px 12px 9px 36px; border: 1.5px solid var(--cream-dark); border-radius: 30px; font-family: 'Gowun Batang', serif; font-size: 14px; background: var(--card-bg); color: var(--text-dark); outline: none; transition: border-color 0.2s; }
+    .filter-input:focus { border-color: var(--sage); }
+    .filter-search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-light); font-size: 14px; pointer-events: none; }
+    .filter-dropdowns { display: flex; gap: 6px; flex-wrap: wrap; width: 100%; margin-top: 6px; }
+    .filter-checkbox-wrap { display: flex; align-items: center; gap: 6px; padding: 8px 12px; border: 1.5px solid var(--cream-dark); border-radius: 20px; font-family: 'Gowun Batang', serif; font-size: 13px; background: var(--card-bg); color: var(--text-dark); cursor: pointer; user-select: none; white-space: nowrap; transition: background 0.2s; }
+    .filter-checkbox-wrap:active { background: var(--cream-dark); }
+    .filter-checkbox-wrap input[type="checkbox"] { margin: 0; width: 15px; height: 15px; accent-color: var(--sage); cursor: pointer; }
+
+    /* ─── KDC 분류 그리드 ─── */
+    .kdc-label { font-size: 12px; color: var(--text-light); margin: 10px 0 6px; }
+    .kdc-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; width: 100%; margin-bottom: 4px; }
+    .kdc-btn { border: none; border-radius: 10px; padding: 7px 4px; cursor: pointer; background: var(--cream-dark); color: var(--text-mid); transition: all 0.15s; display: flex; flex-direction: column; align-items: center; gap: 2px; font-family: 'Gowun Batang', serif; }
+    .kdc-btn .kdc-code { font-size: 11px; font-weight: 700; font-family: monospace; }
+    .kdc-btn .kdc-name { font-size: 10px; line-height: 1.2; text-align: center; }
+    .kdc-btn.active { color: white; }
+    select.filter-select { flex: 1; padding: 8px 10px; border: 1.5px solid var(--cream-dark); border-radius: 20px; font-family: 'Gowun Batang', serif; font-size: 13px; background: var(--card-bg); color: var(--text-dark); outline: none; cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%239e8878' d='M6 8L0 0h12z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 26px; min-width: 100px; }
+    select.filter-select:focus { border-color: var(--sage); }
+    .btn-filter-search { flex-shrink: 0; padding: 9px 14px; background: var(--sage); color: white; border: none; border-radius: 20px; font-family: 'Gowun Batang', serif; font-size: 14px; cursor: pointer; transition: background 0.2s; }
+    .btn-filter-search:active { background: var(--sage-dark); }
+    .btn-filter-close { flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--cream-dark); background: var(--card-bg); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-mid); transition: all 0.2s; }
+
+    /* ─── DONUT CHARTS ─── */
+    .charts-row { display: flex; gap: 10px; padding: 10px 12px 6px; }
+    .chart-card { flex: 1; min-width: 0; background: var(--card-bg); border-radius: var(--radius); padding: 12px 10px; box-shadow: var(--shadow); border: 1px solid rgba(122,158,126,0.1); }
+    .chart-title { font-size: 12.5px; font-weight: 700; color: var(--text-dark); text-align: center; margin-bottom: 8px; }
+    .chart-svg-wrap { display: flex; justify-content: center; margin-bottom: 8px; }
+    .chart-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 6px; }
+    .chart-legend-item { display: flex; align-items: center; gap: 5px; cursor: pointer; transition: opacity 0.2s; }
+    .chart-legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .chart-legend-label { font-size: 10px; color: var(--text-dark); line-height: 1.3; }
+
+    /* ─── STATS BAR ─── */
+    .stats-bar { padding: 6px 16px; font-size: 12px; color: var(--text-light); display: flex; align-items: center; gap: 6px; }
+    .stats-bar .count { font-weight: 700; color: var(--sage-dark); }
+
+    /* ─── MAIN CONTENT ─── */
+    main { padding: 0 12px 160px; }
+    .book-card { background: var(--card-bg); border-radius: var(--radius); padding: 13px 14px; margin-bottom: 8px; box-shadow: var(--shadow); border: 1px solid rgba(122,158,126,0.1); transition: box-shadow 0.2s, transform 0.15s; animation: fadeUp 0.2s ease both; }
+    .book-card:active { transform: scale(0.99); box-shadow: none; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .book-title { font-weight: 700; font-size: 15px; color: var(--text-dark); line-height: 1.4; margin-bottom: 4px; }
+    .book-title mark { background: rgba(193,105,79,0.15); color: var(--terracotta-dark); border-radius: 3px; padding: 0 1px; }
+    .book-meta { font-size: 12.5px; color: var(--text-light); line-height: 1.5; margin-bottom: 6px; }
+    .book-footer { display: flex; align-items: center; justify-content: space-between; }
+    .book-call-number { display: inline-block; background: rgba(193,105,79,0.1); color: var(--terracotta-dark); font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 20px; letter-spacing: 0.03em; }
+    .book-badge { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: rgba(122,158,126,0.12); color: var(--sage-dark); font-weight: 700; }
+    .state-box { text-align: center; padding: 60px 20px; color: var(--text-light); }
+    .state-box .icon { font-size: 48px; margin-bottom: 12px; }
+    .state-box .msg { font-size: 15px; line-height: 1.6; }
+    .state-box .sub { font-size: 13px; margin-top: 6px; }
+    .loading-dots { display: inline-flex; gap: 6px; }
+    .loading-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--sage); animation: bounce 1.2s infinite; }
+    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce { 0%,80%,100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-8px); opacity: 1; } }
+
+    /* ─── FOOTER ─── */
+    footer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--cream); border-top: 1.5px solid var(--cream-dark); padding: 10px 16px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; align-items: center; z-index: 50;}
+    .btn-request { background: var(--terracotta); color: white; border: none; border-radius: 30px; padding: 12px 32px; font-family: 'Gowun Batang', serif; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 16px rgba(193,105,79,0.3); transition: all 0.2s; width: 100%; max-width: 400px; }
+    .btn-request:active { background: var(--terracotta-dark); transform: scale(0.98); }
+    .btn-band { display: flex; align-items: center; gap: 8px; background: #00c73c; color: white; border-radius: 30px; padding: 10px 20px; text-decoration: none; width: 100%; max-width: 400px; margin-bottom: 8px; transition: all 0.2s; justify-content: center; }
+    .btn-band:active { background: #00a832; transform: scale(0.98); }
+    .band-icon { width: 24px; height: 24px; border-radius: 50%; background: white; color: #00c73c; font-size: 14px; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: Arial, sans-serif; line-height: 1; }
+    .band-label { font-family: 'Gowun Batang', serif; font-size: 15px; font-weight: 700; }
+
+    /* ─── MODAL BASE ─── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(58,46,40,0.45); z-index: 300; align-items: flex-end; justify-content: center; backdrop-filter: blur(2px); }
+    .modal-overlay.open { display: flex; }
+    .modal-sheet { background: var(--cream); border-radius: 24px 24px 0 0; width: 100%; max-width: 600px; padding: 20px 20px calc(20px + env(safe-area-inset-bottom)); animation: slideUp 0.3s cubic-bezier(0.34,1.2,0.64,1); max-height: 90vh; overflow-y: auto; }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-handle { width: 36px; height: 4px; background: var(--cream-dark); border-radius: 2px; margin: 0 auto 16px; }
+    .modal-title { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 16px; }
+
+    /* ─── REQUEST MODAL & ADMIN MODAL (기존 유지) ─── */
+    .req-search-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .req-input { flex: 1; padding: 10px 14px; border: 1.5px solid var(--cream-dark); border-radius: 20px; font-family: 'Gowun Batang', serif; font-size: 14px; background: var(--card-bg); outline: none; transition: border-color 0.2s; }
+    .req-input:focus { border-color: var(--sage); }
+    .btn-req-check { padding: 10px 16px; background: var(--sage); color: white; border: none; border-radius: 20px; font-family: 'Gowun Batang', serif; font-size: 14px; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
+    .btn-req-check:active { background: var(--sage-dark); }
+    .req-result { border-radius: var(--radius-sm); padding: 12px 14px; font-size: 14px; line-height: 1.6; margin-bottom: 12px; display: none; }
+    .req-result.found { background: rgba(193,105,79,0.08); border: 1px solid rgba(193,105,79,0.2); color: var(--terracotta-dark); display: block; }
+    .req-result.not-found { background: rgba(122,158,126,0.08); border: 1px solid rgba(122,158,126,0.2); color: var(--sage-dark); display: block; }
+    .btn-go-request { width: 100%; padding: 13px; background: var(--terracotta); color: white; border: none; border-radius: 20px; font-family: 'Gowun Batang', serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.2s; display: none; }
+    .btn-go-request.show { display: block; }
+    .btn-go-request:active { background: var(--terracotta-dark); }
+    .admin-body { background: var(--cream-dark); border-radius: var(--radius-sm); padding: 16px; font-size: 14px; line-height: 1.8; color: var(--text-mid); margin-bottom: 16px; }
+    .admin-body a { color: var(--sage-dark); text-decoration: underline; word-break: break-all; }
+    .btn-refresh { width: 100%; padding: 12px; background: var(--sage); color: white; border: none; border-radius: 20px; font-family: 'Gowun Batang', serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .btn-refresh:active { background: var(--sage-dark); }
+    .found-list { max-height: 320px; overflow-y: auto; margin-top: 6px; }
+    .found-item { padding: 6px 0; border-bottom: 1px solid var(--cream-dark); font-size: 13px; color: var(--text-dark); }
+    .found-item:last-child { border-bottom: none; }
+    .found-item .fi-title { font-weight: 700; }
+    .found-item .fi-meta { color: var(--text-light); font-size: 12px; }
+
+    /* =========================================
+       ✨ 북토크 (Neo-Brutalism 디자인) ✨
+       ========================================= */
     
-    <script src="https://cdn.tailwindcss.com"></script>
+    /* 1. 메인 화면 미니 프리뷰 */
+    .mini-booktalk-wrap {
+      margin: 16px 12px 20px;
+      padding: 14px;
+      background: #ffffff;
+      border: 2.5px solid #111;
+      border-radius: 12px;
+      box-shadow: 4px 4px 0px #111;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .mini-booktalk-wrap:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px #111;
+    }
+    .mini-booktalk-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .mini-booktalk-title {
+      font-weight: 700;
+      font-size: 15px;
+      color: #111;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .mini-booktalk-more {
+      font-size: 12px;
+      font-weight: 700;
+      background: #FFD500;
+      padding: 2px 8px;
+      border: 1.5px solid #111;
+      border-radius: 20px;
+      color: #111;
+    }
+    .mini-booktalk-preview {
+      font-size: 13px;
+      color: #FF4500;
+      font-weight: 700;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .mini-booktalk-meta {
+      font-size: 11px;
+      color: #666;
+      margin-top: 6px;
+      font-weight: 700;
+    }
+
+    /* 2. 북토크 풀스크린 모달 (모달 덮어쓰기) */
+    #booktalk-modal .modal-sheet {
+      background: #f4f4f0;
+      height: 90vh; /* 거의 꽉 찬 화면 */
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+    .bt-header {
+      padding: 20px 20px 10px;
+      border-bottom: 2.5px solid #111;
+      background: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 24px 24px 0 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .bt-title { font-size: 18px; font-weight: 700; color: #111; }
+    .bt-close { font-size: 24px; font-weight: 700; background: none; border: none; cursor: pointer; color: #111; }
     
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    .bt-feed {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: #f4f4f0;
+    }
     
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    /* 힙한 브루탈리즘 카드 디자인 */
+    .bt-card {
+      background: #fff;
+      border: 2.5px solid #111;
+      box-shadow: 4px 4px 0px #111;
+      display: flex;
+      gap: 12px;
+      padding: 14px;
+      position: relative;
+    }
+    .bt-book-icon {
+      width: 44px;
+      height: 56px;
+      background: #FFD500;
+      border: 2px solid #111;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    .bt-content { flex: 1; min-width: 0; }
+    .bt-book-title { font-weight: 700; font-size: 15px; color: #111; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bt-user-info { font-size: 11px; color: #666; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;}
+    .bt-stars { color: #FF4500; letter-spacing: 1px; }
+    .bt-comment { font-size: 13.5px; font-weight: 700; color: #FF4500; line-height: 1.5; word-break: break-all; }
+
+    /* 글쓰기 플로팅 버튼 */
+    .bt-fab-wrap {
+      padding: 16px;
+      background: #fff;
+      border-top: 2.5px solid #111;
+    }
+    .bt-fab {
+      width: 100%;
+      background: #FFD500;
+      border: 2.5px solid #111;
+      box-shadow: 4px 4px 0px #111;
+      color: #111;
+      font-weight: 700;
+      font-size: 16px;
+      padding: 14px;
+      text-align: center;
+      font-family: 'Gowun Batang', serif;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .bt-fab:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #111; }
+
+    /* 3. 북토크 작성 모달 */
+    #write-talk-modal .modal-sheet { background: #fff; border: 2.5px solid #111; box-shadow: 0 -4px 0 #111; border-radius: 24px 24px 0 0; }
+    .wt-label { font-weight: 700; font-size: 14px; color: #111; margin: 12px 0 6px; display: block; }
+    .wt-input {
+      width: 100%; padding: 12px; border: 2px solid #111; background: #f4f4f0;
+      font-family: 'Gowun Batang', serif; font-size: 14px; color: #111; font-weight: 700; outline: none;
+    }
+    .wt-input:focus { background: #fff; border-color: #FF4500; }
+    .wt-row { display: flex; gap: 10px; }
+    .wt-row > div { flex: 1; }
+    
+    /* 별점 선택 UI */
+    .star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 4px; font-size: 28px; }
+    .star-rating input { display: none; }
+    .star-rating label { color: #ddd; cursor: pointer; transition: color 0.2s; }
+    .star-rating label:hover, .star-rating label:hover ~ label, .star-rating input:checked ~ label { color: #FF4500; }
+    
+    .btn-submit-talk {
+      width: 100%; margin-top: 20px; padding: 14px; background: #FF4500; color: #fff;
+      border: 2.5px solid #111; box-shadow: 4px 4px 0px #111; font-family: 'Gowun Batang', serif;
+      font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.1s;
+    }
+    .btn-submit-talk:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #111; }
+
+  </style>
 </head>
-<body class="bg-gray-100">
-    <div id="root"></div>
+<body>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+<header>
+  <div class="header-left">
+    <img src="grae.jpg" alt="로고" class="header-logo" onerror="this.style.display='none';document.getElementById('logo-placeholder').style.display='flex';" />
+    <div class="header-logo-placeholder" id="logo-placeholder" style="display:none;">📚</div>
+    <div class="header-title">
+      <span class="sub">작은 도서관</span>
+      <span class="main">그래 작은 도서관</span>
+    </div>
+  </div>
+  <button class="btn-admin" onclick="openAdminModal()" title="관리자">⚙️</button>
+</header>
 
-        // =====================================================================
-        // ⭐ 초보자 필독: 아래 firebaseConfig 안에 본인의 파이어베이스 키를 넣으세요! ⭐
-        // 파이어베이스 프로젝트 설정에서 받은 'firebaseConfig' 내용을 아래에 덮어쓰시면 됩니다.
-        // 이 부분을 비워두면 실시간 연동 대신 내 핸드폰(로컬)에서만 임시로 작동합니다.
-        // =====================================================================
-        const firebaseConfig = {
-            // apiKey: "AIzaSy...",
-            // authDomain: "your-app.firebaseapp.com",
-            // projectId: "your-app",
-            // storageBucket: "your-app.appspot.com",
-            // messagingSenderId: "123456789",
-            // appId: "1:123456789:web:abcdef"
-        };
+<div class="search-wrap">
+  <div class="search-row" id="basic-search-row">
+    <div class="search-input-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="search" class="search-input" id="main-search" placeholder="책 제목 또는 저자를 검색하세요" autocomplete="off" oninput="onMainSearch()" />
+    </div>
+    <button class="btn-filter" id="btn-filter" onclick="toggleFilter()" title="정밀 필터">🎛️</button>
+  </div>
 
-        // 파이어베이스 연결 설정
-        let db = null;
-        let isFirebaseActive = false;
-        if (firebaseConfig.apiKey) {
-            try {
-                const app = firebase.initializeApp(firebaseConfig);
-                db = firebase.firestore(app);
-                isFirebaseActive = true;
-                console.log("파이어베이스 연결 성공!");
-            } catch (e) {
-                console.error("파이어베이스 연결 에러:", e);
-            }
-        }
+  <div class="filter-panel" id="filter-panel">
+    <div class="filter-panel-inner">
+      <div class="filter-search-wrap">
+        <span class="filter-search-icon">🔍</span>
+        <input type="search" class="filter-input" id="filter-input" placeholder="제목 또는 저자" autocomplete="off" />
+      </div>
+      <button class="btn-filter-search" onclick="runFilter()">검색</button>
+      <button class="btn-filter-close" onclick="closeFilter()">✖️</button>
+    </div>
+    <div class="filter-dropdowns">
+      <select class="filter-select" id="filter-audience" onchange="runFilter()">
+        <option value="">모든 대상</option>
+        <option value="유아">유아</option>
+        <option value="어린이">어린이</option>
+        <option value="청소년">청소년</option>
+        <option value="성인">성인</option>
+        <option value="만화">만화</option>
+      </select>
+      <select class="filter-select" id="filter-sort" onchange="runFilter()">
+        <option value="recent">최신 등록순</option>
+        <option value="alpha">가나다순</option>
+        <option value="callnum">청구기호순</option>
+      </select>
+      <label class="filter-checkbox-wrap">
+        <input type="checkbox" id="filter-english" onchange="runFilter()" />
+        🇺🇸 원서
+      </label>
+    </div>
+    <div class="kdc-label">주제 분류</div>
+    <div class="kdc-grid" id="kdc-grid">
+      <button class="kdc-btn" data-kdc="000" data-color="#5b2d8b" onclick="toggleKdc(this)"><span class="kdc-code">000</span><span class="kdc-name">총류</span></button>
+      <button class="kdc-btn" data-kdc="100" data-color="#5a8a2e" onclick="toggleKdc(this)"><span class="kdc-code">100</span><span class="kdc-name">철학</span></button>
+      <button class="kdc-btn" data-kdc="200" data-color="#cc44aa" onclick="toggleKdc(this)"><span class="kdc-code">200</span><span class="kdc-name">종교</span></button>
+      <button class="kdc-btn" data-kdc="300" data-color="#888888" onclick="toggleKdc(this)"><span class="kdc-code">300</span><span class="kdc-name">사회과학</span></button>
+      <button class="kdc-btn" data-kdc="400" data-color="#4a7a1e" onclick="toggleKdc(this)"><span class="kdc-code">400</span><span class="kdc-name">자연과학</span></button>
+      <button class="kdc-btn" data-kdc="500" data-color="#e0a020" onclick="toggleKdc(this)"><span class="kdc-code">500</span><span class="kdc-name">기술과학</span></button>
+      <button class="kdc-btn" data-kdc="600" data-color="#9b1b1b" onclick="toggleKdc(this)"><span class="kdc-code">600</span><span class="kdc-name">예술</span></button>
+      <button class="kdc-btn" data-kdc="700" data-color="#2b4a8b" onclick="toggleKdc(this)"><span class="kdc-code">700</span><span class="kdc-name">언어</span></button>
+      <button class="kdc-btn" data-kdc="800" data-color="#333333" onclick="toggleKdc(this)"><span class="kdc-code">800</span><span class="kdc-name">문학</span></button>
+      <button class="kdc-btn" data-kdc="900" data-color="#8B4513" onclick="toggleKdc(this)"><span class="kdc-code">900</span><span class="kdc-name">역사</span></button>
+    </div>
+  </div>
+</div>
 
-        // --- 아이콘 이미지 그리기 (외부 이미지를 쓰지 않고 직접 그림) ---
-        const IconUser = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>;
-        const IconUsers = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>;
-        const IconPlus = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>;
-        const IconMinus = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>;
-        const IconBack = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>;
+<div class="stats-bar" id="stats-bar" style="display:none;">총 <span class="count" id="stats-count">0</span>권</div>
 
-        function App() {
-            const [role, setRole] = useState(null); // 'child' 또는 'parent'
-            const [transactions, setTransactions] = useState([]);
-            const [showInputForm, setShowInputForm] = useState(false);
-            const [inputType, setInputType] = useState('expense'); // 'income'(수입) 또는 'expense'(지출)
-            const [amount, setAmount] = useState('');
-            const [description, setDescription] = useState('');
+<main id="book-list">
+  <div class="state-box" id="initial-state">
+    <div class="icon"><div class="loading-dots"><span></span><span></span><span></span></div></div>
+    <div class="msg">도서 목록을 불러오는 중이에요</div>
+  </div>
+</main>
 
-            // 1. 데이터 불러오기 (파이어베이스가 켜져있으면 클라우드, 아니면 내 폰 임시저장)
-            useEffect(() => {
-                if (isFirebaseActive && db) {
-                    const unsubscribe = db.collection('allowance_records').onSnapshot((snapshot) => {
-                        const records = [];
-                        snapshot.forEach((doc) => records.push({ id: doc.id, ...doc.data() }));
-                        records.sort((a, b) => b.timestamp - a.timestamp); // 최신순 정렬
-                        setTransactions(records);
-                    });
-                    return () => unsubscribe();
-                } else {
-                    const saved = localStorage.getItem('local_allowance');
-                    if (saved) setTransactions(JSON.parse(saved));
-                }
-            }, []);
+<footer>
+  <a class="btn-band" href="https://band.us/@graelib" target="_blank" rel="noopener">
+    <span class="band-icon">B</span>
+    <span class="band-label">네이버 밴드</span>
+  </a>
+  <button class="btn-request" onclick="openRequestModal()">📬 없는 책 신청하기</button>
+</footer>
 
-            // 2. 입력한 내역 저장하기
-            const handleAddTransaction = (e) => {
-                e.preventDefault();
-                if (!amount || !description) return;
-                const numAmount = parseInt(amount, 10);
-                if (isNaN(numAmount) || numAmount <= 0) return;
+<div class="modal-overlay" id="request-modal" onclick="closeModalOnBg(event,'request-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📬 희망 도서 신청</div>
+    <p style="font-size:13.5px;color:var(--text-mid);margin-bottom:14px;line-height:1.6;">
+      먼저 도서관에 이미 있는 책인지 확인해 볼게요.<br/>책 제목을 입력하고 <strong>중복 확인</strong> 버튼을 눌러 주세요.
+    </p>
+    <div class="req-search-row">
+      <input type="text" class="req-input" id="req-input" placeholder="책 제목 입력" onkeydown="if(event.key==='Enter')checkDuplicate()" />
+      <button class="btn-req-check" onclick="checkDuplicate()">중복 확인</button>
+    </div>
+    <div class="req-result" id="req-result"></div>
+    <button class="btn-go-request" id="btn-go-request" onclick="goRequest()">📝 희망 도서 신청서 작성하기</button>
+  </div>
+</div>
 
-                const newRecord = {
-                    type: inputType,
-                    amount: numAmount,
-                    description: description,
-                    timestamp: Date.now(),
-                    writer: role
-                };
+<div class="modal-overlay" id="admin-modal" onclick="closeModalOnBg(event,'admin-modal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">⚙️ 관리자 안내</div>
+    <div class="admin-body">
+      📋 <strong>도서 목록 수정</strong>은 구글 스프레드시트에서 직접 하시면,<br/>다음 새로고침 시 앱에 자동으로 반영됩니다.<br/><br/>
+      🔗 스프레드시트 링크:<br/><a href="https://docs.google.com/spreadsheets/d/14eaHAXJvx8HYq-UMozeoxnGfRpigLLaibStOkYB8MsU/edit?usp=sharing" target="_blank" rel="noopener">도서 목록 스프레드시트 열기 ↗</a><br/><br/>
+      🕐 <strong>마지막 업데이트:</strong> <span id="admin-update-time">확인 중...</span>
+      <hr style="border: 0; border-top: 1.5px dashed var(--cream); margin: 18px 0;" />
+      💡 <strong>앱 관련 피드백</strong><br/>사용 중 불편한 점이나 추가되었으면 하는 기능이 있다면 언제든 편하게 알려주세요!<br/>
+      <a href="https://open.kakao.com/me/mydaddyapple" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; background: #FEE500; color: #371D1E; padding: 10px 16px; border-radius: 20px; text-decoration: none; font-weight: 700; font-size: 13.5px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: transform 0.2s;" onactive="this.style.transform='scale(0.98)'">💬 카카오톡으로 의견 보내기 ↗</a>
+    </div>
+    <button class="btn-refresh" onclick="refreshData()">🔄 도서 목록 새로고침</button>
+  </div>
+</div>
 
-                if (isFirebaseActive && db) {
-                    db.collection('allowance_records').add(newRecord).then(() => {
-                        setAmount(''); setDescription(''); setShowInputForm(false);
-                    });
-                } else {
-                    const updated = [{ id: Date.now().toString(), ...newRecord }, ...transactions];
-                    setTransactions(updated);
-                    localStorage.setItem('local_allowance', JSON.stringify(updated));
-                    setAmount(''); setDescription(''); setShowInputForm(false);
-                }
-            };
+<div class="modal-overlay" id="booktalk-modal" onclick="closeModalOnBg(event,'booktalk-modal')">
+  <div class="modal-sheet">
+    <div class="bt-header">
+      <div class="bt-title">💬 실시간 독서 피드</div>
+      <button class="bt-close" onclick="closeBookTalkModal()">&times;</button>
+    </div>
+    <div class="bt-feed" id="bt-feed-container"></div>
+    
+    <div class="bt-fab-wrap">
+      <button class="bt-fab" onclick="openWriteTalkModal()">✍️ 나도 북토크 남기기</button>
+    </div>
+  </div>
+</div>
 
-            // 3. 보상 시스템 계산
-            const currentBalance = transactions.reduce((acc, curr) => curr.type === 'income' ? acc + curr.amount : acc - curr.amount, 0);
-            
-            // 기록 3번당 별 1개
-            const earnedStickers = Math.floor(transactions.length / 3);
+<div class="modal-overlay" id="write-talk-modal" style="z-index: 310;">
+  <div class="modal-sheet">
+    <div class="modal-handle" onclick="closeWriteTalkModal()"></div>
+    <div class="modal-title">✍️ 감상 남기기</div>
+    
+    <label class="wt-label">어떤 책을 읽으셨나요?</label>
+    <input type="text" id="wt-title" class="wt-input" placeholder="책 제목을 적어주세요" />
+    
+    <div class="wt-row">
+      <div>
+        <label class="wt-label">닉네임</label>
+        <input type="text" id="wt-nickname" class="wt-input" placeholder="예: 그래요정" maxlength="10" />
+      </div>
+      <div>
+        <label class="wt-label">연령대</label>
+        <select id="wt-age" class="wt-input">
+          <option value="10대 이하">10대 이하</option>
+          <option value="10대" selected>10대</option>
+          <option value="20대">20대</option>
+          <option value="30대">30대</option>
+          <option value="40대">40대</option>
+          <option value="50대 이상">50대 이상</option>
+        </select>
+      </div>
+    </div>
+    
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <label class="wt-label">별점</label>
+      <div class="star-rating">
+        <input type="radio" id="star5" name="rating" value="5" checked/><label for="star5" title="5점">★</label>
+        <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4점">★</label>
+        <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3점">★</label>
+        <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2점">★</label>
+        <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1점">★</label>
+      </div>
+    </div>
+    
+    <label class="wt-label">기억에 남는 문장이나 소감</label>
+    <textarea id="wt-comment" class="wt-input" rows="4" placeholder="자유롭게 적어주세요!" style="resize:none;"></textarea>
+    
+    <button class="btn-submit-talk" id="btn-submit-talk" onclick="submitBookTalk()">등록하기</button>
+  </div>
+</div>
 
-            // 잔액에 따른 레벨
-            const getLevelInfo = (balance) => {
-                if (balance >= 10000) return { icon: '🐔', title: '황금 용돈닭', desc: '와! 저축 마스터가 되었어요!' };
-                if (balance >= 5000) return { icon: '🐥', title: '저축 병아리', desc: '무럭무럭 돈이 모이고 있어요!' };
-                return { icon: '🥚', title: '알뜰 초보 알', desc: '조금씩 아껴서 부화시켜보아요!' };
-            };
-            const levelInfo = getLevelInfo(currentBalance);
+<script>
+// ─── CONFIG & DATA ───────────────────────────────────────────────────────
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR9wF1ojhJI8CwEpJPjk3xkUiOB5gxTpFtsaKGZ08j-kvksuv9NzJSl_GEp01J15W4uSzRkOUF_P4QP/pub?gid=1825971218&single=true&output=csv';
+const REQUEST_URL = 'https://forms.gle/VZZNRDchkFnrXEjo8';
 
-            // --- 화면 1: 역할 선택 모드 ---
-            if (!role) {
-                return (
-                    <div className="flex flex-col h-screen max-w-md mx-auto bg-yellow-50 items-center justify-center p-6 shadow-lg relative">
-                        {!isFirebaseActive && (
-                            <div className="absolute top-4 w-full px-6">
-                                <div className="bg-red-100 text-red-600 p-3 rounded-lg text-sm text-center font-bold">
-                                    ⚠️ 현재 파이어베이스가 연결되지 않았습니다.<br/>테스트용으로 내 기기에만 저장됩니다.
-                                </div>
-                            </div>
-                        )}
-                        <div className="bg-white p-8 rounded-2xl shadow-md w-full text-center space-y-8">
-                            <div>
-                                <h1 className="text-3xl font-extrabold text-gray-800 mb-2">용돈기입장</h1>
-                                <p className="text-gray-500">누가 접속했나요?</p>
-                            </div>
-                            <div className="space-y-4">
-                                <button onClick={() => setRole('child')} className="w-full flex items-center justify-center space-x-3 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold py-4 px-6 rounded-xl transition shadow-sm">
-                                    <IconUser /> <span className="text-lg">나는 아이예요</span>
-                                </button>
-                                <button onClick={() => setRole('parent')} className="w-full flex items-center justify-center space-x-3 bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-xl transition shadow-sm">
-                                    <IconUsers /> <span className="text-lg">나는 부모예요</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
+let allBooks = [];
+let isFilterMode = false;
+let lastQuery = '';
+let debounceTimer = null;
 
-            // --- 화면 2: 입력 폼 모드 ---
-            if (showInputForm) {
-                return (
-                    <div className="flex flex-col h-screen max-w-md mx-auto bg-gray-50 shadow-lg">
-                        <div className="p-4 bg-white flex items-center shadow-sm">
-                            <button onClick={() => setShowInputForm(false)} className="p-2 text-gray-600 hover:bg-gray-100 rounded-full"><IconBack /></button>
-                            <h2 className="text-xl font-bold ml-2 text-gray-800">{inputType === 'income' ? (role === 'child' ? '용돈 받았어요!' : '용돈 주기') : '돈을 썼어요!'}</h2>
-                        </div>
-                        <form onSubmit={handleAddTransaction} className="p-6 flex-1 space-y-6">
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">금액</label>
-                                <div className="relative">
-                                    <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="예: 1500" className="w-full text-2xl font-bold p-4 border-2 border-gray-200 rounded-xl focus:border-yellow-400 focus:outline-none" autoFocus />
-                                    <span className="absolute right-4 top-4 text-xl text-gray-500 font-bold">원</span>
-                                </div>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-bold text-gray-700 mb-2">내용</label>
-                                <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder={inputType === 'income' ? "예: 심부름, 주간 용돈" : "예: 학용품, 과자"} className="w-full text-lg p-4 border-2 border-gray-200 rounded-xl focus:border-yellow-400 focus:outline-none" />
-                            </div>
-                            <button type="submit" className={`w-full font-bold py-4 rounded-xl text-lg shadow-md transition ${inputType === 'income' ? 'bg-blue-500 text-white' : 'bg-red-500 text-white'}`}>
-                                기록하기
-                            </button>
-                        </form>
-                    </div>
-                );
-            }
+// 🟢 [추가] 가상의 북토크 임시 데이터 (나중에 구글 시트에서 불러올 예정)
+let dummyBookTalks = [
+  { title: "고슴도치의 소원", age: "10대", nickname: "가시송송", rating: 5, comment: "\"아무도 우리 집에 찾아오지 않았다\"라는 문장이 마음에 들었습니다. 예전에 친구들과 잘 놀지 못했던 새 학기의 기억이 떠올라서 공감이 많이 갔어요!" },
+  { title: "장미와 나이프", age: "40대", nickname: "추리매니아", rating: 4, comment: "히가시노 게이고 특유의 빠져드는 추리를 짧은 단편 여러 개로 즐길 수 있어서 가볍게 읽기 아주 좋았습니다." },
+  { title: "리플레이", age: "10대", nickname: "야구왕", rating: 5, comment: "해람이가 야구를 하다 다쳐서 생긴 트라우마를 희영이를 통해 극복하는 내용이 감동적이었어요." }
+];
 
-            // --- 화면 3: 메인 대시보드 ---
-            return (
-                <div className="flex flex-col h-screen max-w-md mx-auto bg-gray-50 shadow-lg relative overflow-hidden">
-                    {/* 상단바 */}
-                    <div className={`p-4 flex justify-between items-center text-white shadow-md z-20 ${role === 'child' ? 'bg-yellow-500' : 'bg-blue-600'}`}>
-                        <div className="flex items-center space-x-2">
-                            {role === 'child' ? <IconUser /> : <IconUsers />}
-                            <span className="font-bold text-lg">{role === 'child' ? '내 용돈기입장' : '우리아이 용돈 확인'}</span>
-                        </div>
-                        <button onClick={() => setRole(null)} className="text-sm bg-white/20 px-3 py-1 rounded-full hover:bg-white/30 transition">역할변경</button>
-                    </div>
+// ─── CSV PARSER & LOAD ───────────────────────────────────────────────────
+function parseRowSafe(line) {
+  const result = [];
+  let inQuote = false, cur = '';
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQuote && line[i + 1] === '"') { cur += '"'; i++; } else { inQuote = !inQuote; }
+    } else if (ch === ',' && !inQuote) { result.push(cur.trim()); cur = ''; } else { cur += ch; }
+  }
+  result.push(cur.trim());
+  return result;
+}
+function getSafeStr(val) { return val === undefined || val === null ? '' : String(val).trim(); }
 
-                    {/* 보상 및 잔액 정보 */}
-                    <div className="bg-white rounded-b-3xl shadow-sm z-10 p-6 pt-4 space-y-4">
-                        <div className="flex items-center justify-between bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                            <div className="flex items-center space-x-3">
-                                <div className="text-4xl">{levelInfo.icon}</div>
-                                <div>
-                                    <p className="font-extrabold text-gray-800 text-lg">{levelInfo.title}</p>
-                                    <p className="text-xs text-gray-500">{levelInfo.desc}</p>
-                                </div>
-                            </div>
-                            <div className="text-right pl-4 border-l border-gray-200">
-                                <div className="flex items-center justify-end text-yellow-500 mb-1">
-                                    <span className="text-lg">⭐</span>
-                                    <span className="font-bold ml-1">{earnedStickers}개</span>
-                                </div>
-                                <p className="text-[10px] text-gray-400">기록 칭찬별</p>
-                            </div>
-                        </div>
+const COL = { NO:0, REG:1, TITLE:2, AUTHOR:3, VOL:4, SERIES:5, AUTHSYM:6, LOCATION:7, CLASS:8, CLASSNO:9, COPY:10, ISBN:11, ATTACH:12, PUBLISHER:13, YEAR:14, PLACE:15, PAGES:16, SIZE:17, PRICE:18, REGDATE:19 };
 
-                        <div>
-                            <p className="text-gray-500 font-medium text-sm mb-1">현재 남은 돈</p>
-                            <div className="flex items-end space-x-1">
-                                <span className="text-4xl font-extrabold text-gray-800">{currentBalance.toLocaleString()}</span>
-                                <span className="text-xl font-bold text-gray-600 mb-1">원</span>
-                            </div>
-                        </div>
-                    </div>
+function parseBooks(csvText) {
+  const lines = csvText.split('\n').filter(l => l.trim());
+  const books = [];
+  for (let i = 1; i < lines.length; i++) {
+    const cols = parseRowSafe(lines[i]);
+    const title = getSafeStr(cols[COL.TITLE]);
+    if (!title) continue;
+    const loc = getSafeStr(cols[COL.LOCATION]);
+    const cls = getSafeStr(cols[COL.CLASS]);
+    const authSym = getSafeStr(cols[COL.AUTHSYM]);
+    const clsn = getSafeStr(cols[COL.CLASSNO]);
+    const copy = getSafeStr(cols[COL.COPY]);
+    const copyStr = (copy && copy !== '1') ? 'c.' + copy : '';
+    const callNum = [loc, cls, authSym, clsn, copyStr].filter(Boolean).join(' ');
+    let regDate = null;
+    const rd = getSafeStr(cols[COL.REGDATE]);
+    if (rd) regDate = new Date(rd);
+    books.push({ title, author: getSafeStr(cols[COL.AUTHOR]), publisher: getSafeStr(cols[COL.PUBLISHER]), year: getSafeStr(cols[COL.YEAR]), location: loc, callNum, regDate });
+  }
+  return books;
+}
 
-                    {/* 내역 리스트 */}
-                    <div className="flex-1 overflow-y-auto p-4 space-y-3 pb-24">
-                        {transactions.length === 0 ? (
-                            <div className="text-center text-gray-400 mt-10">
-                                <p className="text-4xl mb-2">📝</p>
-                                <p>아직 기록이 없어요!</p>
-                                <p className="text-sm mt-2 font-bold text-yellow-500">3번 기록하면 칭찬별을 받아요!</p>
-                            </div>
-                        ) : (
-                            transactions.map((tx) => {
-                                const date = new Date(tx.timestamp);
-                                const dateString = `${date.getMonth() + 1}/${date.getDate()}`;
-                                return (
-                                    <div key={tx.id} className="bg-white p-4 rounded-xl shadow-sm flex items-center justify-between border border-gray-100">
-                                        <div className="flex items-center space-x-4">
-                                            <div className={`p-3 rounded-full ${tx.type === 'income' ? 'bg-blue-100 text-blue-600' : 'bg-red-100 text-red-500'}`}>
-                                                {tx.type === 'income' ? <IconPlus /> : <IconMinus />}
-                                            </div>
-                                            <div>
-                                                <p className="font-bold text-gray-800">{tx.description}</p>
-                                                <p className="text-xs text-gray-400">{dateString} • {tx.writer === 'child' ? '아이가' : '부모가'} 기록함</p>
-                                            </div>
-                                        </div>
-                                        <span className={`font-bold text-lg ${tx.type === 'income' ? 'text-blue-600' : 'text-gray-800'}`}>
-                                            {tx.type === 'income' ? '+' : '-'}{tx.amount.toLocaleString()}원
-                                        </span>
-                                    </div>
-                                );
-                            })
-                        )}
-                    </div>
+async function fetchWithProxy(url) {
+  try { const res = await fetch(url, { cache: 'no-store' }); if (res.ok) { const text = await res.text(); if (text.length >= 50 && !text.trim().startsWith('<!')) return text; } } catch (_) { }
+  const proxies = [ `https://corsproxy.io/?url=${encodeURIComponent(url)}`, `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, `https://r.jina.ai/${url}` ];
+  for (const proxy of proxies) { try { const res = await fetch(proxy, { cache: 'no-store' }); if (!res.ok) continue; const text = await res.text(); if (text.length < 50 || text.trim().startsWith('<!')) continue; return text; } catch (_) { } }
+  throw new Error('모든 데이터 로드 시도가 실패했습니다');
+}
 
-                    {/* 하단 입력 버튼 (역할에 따라 다르게 보임) */}
-                    <div className="absolute bottom-0 w-full p-4 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-20">
-                        <div className="flex space-x-3">
-                            {role === 'child' ? (
-                                <>
-                                    <button onClick={() => { setInputType('expense'); setShowInputForm(true); }} className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2 shadow-md transition">
-                                        <IconMinus /><span>돈 썼어요</span>
-                                    </button>
-                                    <button onClick={() => { setInputType('income'); setShowInputForm(true); }} className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2 shadow-md transition">
-                                        <IconPlus /><span>돈 받았어요</span>
-                                    </button>
-                                </>
-                            ) : (
-                                <button onClick={() => { setInputType('income'); setShowInputForm(true); }} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl flex items-center justify-center space-x-2 shadow-md transition">
-                                    <IconPlus /><span>용돈 주기 (수입 추가)</span>
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            );
-        }
+const CACHE_KEY = 'grae_books_cache';
+const CACHE_TIME_KEY = 'grae_books_cache_time';
+const CACHE_TTL = 1000 * 60 * 60; 
+function saveCache(text) { try { localStorage.setItem(CACHE_KEY, text); localStorage.setItem(CACHE_TIME_KEY, Date.now().toString()); } catch (_) {} }
+function loadCache() { try { const savedTime = parseInt(localStorage.getItem(CACHE_TIME_KEY) || '0'); const text = localStorage.getItem(CACHE_KEY); if (!text) return null; return { text, isStale: (Date.now() - savedTime) > CACHE_TTL }; } catch (_) { return null; } }
 
-        // 앱을 화면에 실제로 그리는 명령어
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+async function loadBooks() {
+  const cache = loadCache();
+  if (cache) {
+    allBooks = parseBooks(cache.text);
+    showInitial();
+    fetchWithProxy(CSV_URL).then(text => {
+      saveCache(text);
+      const fresh = parseBooks(text);
+      if (fresh.length !== allBooks.length) { allBooks = fresh; showInitial(); }
+    }).catch(() => {});
+  } else {
+    try { const text = await fetchWithProxy(CSV_URL); saveCache(text); allBooks = parseBooks(text); showInitial(); } catch (e) { showError(); }
+  }
+}
+
+// ─── UI COMPONENTS ───────────────────────────────────────────────────────
+function showInitial() {
+  const listEl = document.getElementById('book-list');
+  const total = allBooks.length;
+  
+  // 🟢 [추가] 차트와 검색 결과 사이에 '미니 북토크 프리뷰' 삽입
+  const latestTalk = dummyBookTalks[0];
+  const miniTalkHtml = `
+    <div class="mini-booktalk-wrap" onclick="openBookTalkModal()">
+      <div class="mini-booktalk-header">
+        <div class="mini-booktalk-title">💬 방금 올라온 독서 피드</div>
+        <div class="mini-booktalk-more">전체보기 ➔</div>
+      </div>
+      <div class="mini-booktalk-preview">"${latestTalk.comment}"</div>
+      <div class="mini-booktalk-meta">${latestTalk.title} | ${latestTalk.nickname} 님</div>
+    </div>
+  `;
+
+  listEl.innerHTML = `
+    <div style="text-align:center;padding:14px 0 10px;font-size:13px;color:var(--text-light)">
+      총 <strong style="color:var(--sage-dark);font-size:15px">${total.toLocaleString()}권</strong>의 도서가 있어요
+    </div>
+    <div class="charts-row">
+      <div class="chart-card" id="chart-kdc"><div class="chart-title">📚 주제별</div><div class="chart-svg-wrap"></div><div class="chart-legend"></div></div>
+      <div class="chart-card" id="chart-aud"><div class="chart-title">👥 대상별</div><div class="chart-svg-wrap"></div><div class="chart-legend"></div></div>
+    </div>
+    
+    ${miniTalkHtml} <div style="text-align:center;padding:6px 0 0;font-size:11.5px;color:var(--text-light)">
+      검색창에 책 제목이나 저자를 입력해 보세요
+    </div>`;
+
+  document.getElementById('stats-bar').style.display = 'none';
+  renderDonut('chart-kdc', getKdcCounts(), total, true);
+  renderDonut('chart-aud', getAudCounts(), total, false);
+}
+
+// (Donut chart functions omitted for brevity, keeping existing logic)
+const KDC_META = [ { code:'000', label:'총류', color:'#5b2d8b' }, { code:'100', label:'철학', color:'#5a8a2e' }, { code:'200', label:'종교', color:'#cc44aa' }, { code:'300', label:'사회과학',color:'#888888' }, { code:'400', label:'자연과학',color:'#4a7a1e' }, { code:'500', label:'기술과학',color:'#e0a020' }, { code:'600', label:'예술', color:'#9b1b1b' }, { code:'700', label:'언어', color:'#2b4a8b' }, { code:'800', label:'문학', color:'#333333' }, { code:'900', label:'역사', color:'#8B4513' } ];
+const AUD_META = [ { key:'유아', label:'유아', color:'#f4a261' }, { key:'어린이', label:'어린이', color:'#e76f51' }, { key:'청소년', label:'청소년', color:'#2a9d8f' }, { key:'성인', label:'성인', color:'#457b9d' }, { key:'만화', label:'만화', color:'#c8a600' } ];
+function buildDonutPath(items, total, r, cx, cy) { let cum = 0; return items.map(item => { const pct = item.count / total; const gap = 0.025; const s = cum * 2 * Math.PI - Math.PI / 2 + gap; const e = (cum + pct) * 2 * Math.PI - Math.PI / 2 - gap; cum += pct; if (e <= s) return { ...item, d: '', pct }; const x1 = cx + r * Math.cos(s), y1 = cy + r * Math.sin(s); const x2 = cx + r * Math.cos(e), y2 = cy + r * Math.sin(e); const large = pct > 0.5 ? 1 : 0; return { ...item, d: `M${x1} ${y1} A${r} ${r} 0 ${large} 1 ${x2} ${y2}`, pct }; }); }
+function getKdcCounts() { const total = allBooks.length; return KDC_META.map(k => { const count = allBooks.filter(b => { const num = parseInt(b.callNum.replace(/^[^\d]*/, '').match(/\d+/)?.[0] || '0'); return Math.floor(num / 100) * 100 === parseInt(k.code); }).length; return { ...k, count }; }).filter(k => k.count > 0); }
+function getAudCounts() { return AUD_META.map(a => { let count; if (a.key === '유아') count = allBooks.filter(b => b.location.toLowerCase().includes('유')).length; else if (a.key === '어린이') count = allBooks.filter(b => b.location.toLowerCase().includes('아')).length; else if (a.key === '청소년') count = allBooks.filter(b => b.location.toLowerCase().includes('청')).length; else if (a.key === '만화') count = allBooks.filter(b => b.location.toLowerCase().includes('만')).length; else count = allBooks.filter(b => { const l = b.location.toLowerCase(); return !l.includes('유') && !l.includes('아') && !l.includes('청') && !l.includes('만'); }).length; return { ...a, count }; }).filter(a => a.count > 0); }
+function renderDonut(containerId, items, total, showTotal) { const wrap = document.getElementById(containerId); if (!wrap) return; const segs = buildDonutPath(items, total, 38, 50, 50); let hoveredIdx = null; function updateCenter() { const item = hoveredIdx !== null ? segs[hoveredIdx] : null; const lblEl = wrap.querySelector('.dc-lbl'); const cntEl = wrap.querySelector('.dc-cnt'); const subEl = wrap.querySelector('.dc-sub'); if (item) { lblEl.textContent = item.label; cntEl.textContent = item.count.toLocaleString(); subEl.textContent = Math.round(item.pct * 100) + '%'; } else if (showTotal) { lblEl.textContent = '전체'; cntEl.textContent = total.toLocaleString(); subEl.textContent = '권'; } else { lblEl.textContent = '탭하면'; cntEl.textContent = '권수·비율'; subEl.textContent = '표시'; } wrap.querySelectorAll('.chart-legend-item').forEach((el, i) => { el.style.opacity = hoveredIdx === null || hoveredIdx === i ? '1' : '0.35'; }); wrap.querySelectorAll('path[data-idx]').forEach(p => { const i = parseInt(p.dataset.idx); p.style.opacity = hoveredIdx === null || hoveredIdx === i ? '1' : '0.3'; }); } const svgPaths = segs.map((s, i) => s.d ? `<path data-idx="${i}" d="${s.d}" fill="none" stroke="${s.color}" stroke-width="16" stroke-linecap="butt" style="cursor:pointer;transition:opacity 0.2s"/>` : '' ).join(''); const centerY1 = showTotal ? '44' : '43'; const centerY2 = showTotal ? '56' : '54'; wrap.querySelector('.chart-svg-wrap').innerHTML = ` <svg viewBox="0 0 100 100" width="130" height="130" id="${containerId}-svg"> ${svgPaths} <text class="dc-lbl" x="50" y="${centerY1}" text-anchor="middle" font-size="8.5" fill="#9e8878" font-family="serif"></text> <text class="dc-cnt" x="50" y="${centerY2}" text-anchor="middle" font-size="10.5" fill="#3a2e28" font-weight="bold" font-family="serif"></text> <text class="dc-sub" x="50" y="65" text-anchor="middle" font-size="8" fill="#9e8878" font-family="serif"></text> </svg>`; const legendHtml = items.map((item, i) => ` <div class="chart-legend-item" data-idx="${i}"> <span class="chart-legend-dot" style="background:${item.color}"></span> <span class="chart-legend-label">${item.label}</span> </div>`).join(''); wrap.querySelector('.chart-legend').innerHTML = legendHtml; updateCenter(); wrap.querySelectorAll('path[data-idx]').forEach(p => { p.addEventListener('mouseenter', () => { hoveredIdx = parseInt(p.dataset.idx); updateCenter(); }); p.addEventListener('mouseleave', () => { hoveredIdx = null; updateCenter(); }); p.addEventListener('touchstart', (e) => { e.preventDefault(); hoveredIdx = hoveredIdx === parseInt(p.dataset.idx) ? null : parseInt(p.dataset.idx); updateCenter(); }); }); wrap.querySelectorAll('.chart-legend-item').forEach(el => { const i = parseInt(el.dataset.idx); el.addEventListener('mouseenter', () => { hoveredIdx = i; updateCenter(); }); el.addEventListener('mouseleave', () => { hoveredIdx = null; updateCenter(); }); el.addEventListener('touchstart', (e) => { e.preventDefault(); hoveredIdx = hoveredIdx === i ? null : i; updateCenter(); }); }); }
+function showError() { document.getElementById('book-list').innerHTML = `<div class="state-box"><div class="icon">😢</div><div class="msg">도서 목록을 불러오지 못했어요</div><div class="sub">네트워크 상태를 확인하고 다시 시도해 주세요</div><button onclick="loadBooks()" style="margin-top:14px;padding:10px 24px;background:var(--sage);color:white;border:none;border-radius:20px;font-family:'Gowun Batang',serif;font-size:14px;cursor:pointer;">🔄 다시 시도</button></div>`; }
+function matchAudience(book, audience) { if (!audience) return true; const loc = book.location.toLowerCase(); if (audience === '유아') return loc.includes('유'); if (audience === '어린이') return loc.includes('아'); if (audience === '청소년') return loc.includes('청'); if (audience === '만화') return loc.includes('만'); if (audience === '성인') return loc === '' || (!loc.includes('유') && !loc.includes('아') && !loc.includes('청') && !loc.includes('만')); return true; }
+function highlight(text, query) { if (!query) return escHtml(text); const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); return escHtml(text).replace(new RegExp(escaped, 'gi'), m => `<mark>${m}</mark>`); }
+function escHtml(str) { return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function normalizeSpace(str) { return str.toLowerCase().replace(/\s+/g, ''); }
+function badgeLabel(loc) { const l = loc.toLowerCase(); let prefix = ''; if (l.startsWith('영')) prefix = '🇺🇸원서 - '; let main = ''; if (l.includes('유')) main = '유아'; else if (l.includes('아')) main = '어린이'; else if (l.includes('청')) main = '청소년'; else if (l.includes('만')) main = '만화'; else if (l.includes('빅')) main = 'BIG'; else if (l === '' || l === '영') main = (l === '영' ? '일반' : ''); if (prefix && main) return prefix + main; if (prefix) return prefix.replace(' - ', ''); return main; }
+
+function renderBooks(books, query) {
+  const listEl = document.getElementById('book-list');
+  const statsEl = document.getElementById('stats-bar');
+  const countEl = document.getElementById('stats-count');
+  if (!books.length) { listEl.innerHTML = `<div class="state-box"><div class="icon">🔍</div><div class="msg">검색 결과가 없어요</div><div class="sub">다른 키워드로 검색하거나<br/>아래 '없는 책 신청하기'를 눌러 주세요</div></div>`; statsEl.style.display = 'none'; return; }
+  countEl.textContent = books.length;
+  statsEl.style.display = 'flex';
+  listEl.innerHTML = books.map((b, i) => {
+    const metaParts = [b.author, b.publisher, b.year].filter(Boolean);
+    const badge = badgeLabel(b.location);
+    return `<div class="book-card" style="animation-delay:${Math.min(i*0.03,0.3)}s"><div class="book-title">${highlight(b.title, query)}</div><div class="book-meta">${escHtml(metaParts.join(' · '))}</div><div class="book-footer"><span class="book-call-number">${escHtml(b.callNum) || '—'}</span>${badge ? `<span class="book-badge">${badge}</span>` : ''}</div></div>`;
+  }).join('');
+}
+
+function onMainSearch() { const q = document.getElementById('main-search').value.trim(); clearTimeout(debounceTimer); if (!q) { showInitial(); return; } debounceTimer = setTimeout(() => { lastQuery = q; const normQ = normalizeSpace(q); const filtered = allBooks.filter(b => normalizeSpace(b.title).includes(normQ) || normalizeSpace(b.author).includes(normQ)).sort((a, b) => { if (!a.regDate && !b.regDate) return 0; if (!a.regDate) return 1; if (!b.regDate) return -1; return b.regDate - a.regDate; }); renderBooks(filtered, q); }, 200); }
+let selectedKdc = null;
+function toggleKdc(btn) { const kdc = btn.dataset.kdc; const color = btn.dataset.color; if (selectedKdc === kdc) { selectedKdc = null; btn.classList.remove('active'); btn.style.background = ''; } else { document.querySelectorAll('.kdc-btn').forEach(b => { b.classList.remove('active'); b.style.background = ''; b.style.color = ''; }); selectedKdc = kdc; btn.classList.add('active'); btn.style.background = color; btn.style.color = 'white'; } runFilter(); }
+function toggleFilter() { isFilterMode = !isFilterMode; const panel = document.getElementById('filter-panel'); const btnF = document.getElementById('btn-filter'); if (isFilterMode) { panel.classList.add('open'); btnF.classList.add('active'); document.getElementById('main-search').value = ''; showInitial(); setTimeout(() => document.getElementById('filter-input').focus(), 100); } else { panel.classList.remove('open'); btnF.classList.remove('active'); showInitial(); } }
+function closeFilter() { isFilterMode = false; selectedKdc = null; document.querySelectorAll('.kdc-btn').forEach(b => { b.classList.remove('active'); b.style.background = ''; b.style.color = ''; }); document.getElementById('filter-panel').classList.remove('open'); document.getElementById('btn-filter').classList.remove('active'); showInitial(); }
+function runFilter() { const q = document.getElementById('filter-input').value.trim(); const audience = document.getElementById('filter-audience').value; const sort = document.getElementById('filter-sort').value; const engOnly = document.getElementById('filter-english').checked; if (!q && !audience && !selectedKdc && !engOnly) { const all = [...allBooks].sort((a, b) => { if (!a.regDate && !b.regDate) return 0; if (!a.regDate) return 1; if (!b.regDate) return -1; return b.regDate - a.regDate; }); renderBooks(all, ''); return; } const normQ = normalizeSpace(q); let filtered = allBooks.filter(b => { const matchQ = !q || (normalizeSpace(b.title).includes(normQ) || normalizeSpace(b.author).includes(normQ)); const matchKdc = !selectedKdc || (b.callNum.replace(/^[^\d]*/, '').match(/^\d+/) && Math.floor(parseInt(b.callNum.replace(/^[^\d]*/, '').match(/^\d+/)[0]) / 100) * 100 === parseInt(selectedKdc)); const matchEng = !engOnly || b.location.startsWith('영'); return matchQ && matchAudience(b, audience) && matchKdc && matchEng; }); if (sort === 'alpha') { filtered.sort((a, b) => a.title.localeCompare(b.title, 'ko')); } else if (sort === 'callnum') { filtered.sort((a, b) => a.callNum.localeCompare(b.callNum, 'ko', { numeric: true })); } else { filtered.sort((a, b) => { if (!a.regDate && !b.regDate) return 0; if (!a.regDate) return 1; if (!b.regDate) return -1; return b.regDate - a.regDate; }); } lastQuery = q; renderBooks(filtered, q); }
+
+function openRequestModal() { document.getElementById('req-input').value = ''; document.getElementById('req-result').className = 'req-result'; document.getElementById('req-result').innerHTML = ''; document.getElementById('btn-go-request').classList.remove('show'); document.getElementById('request-modal').classList.add('open'); }
+function checkDuplicate() { const q = document.getElementById('req-input').value.trim(); if (!q) { goRequest(); return; } const normQ = normalizeSpace(q); const found = allBooks.filter(b => normalizeSpace(b.title).includes(normQ)); found.sort((a, b) => { const an = normalizeSpace(a.title); const bn = normalizeSpace(b.title); const aExact = an === normQ ? 0 : an.startsWith(normQ) ? 1 : 2; const bExact = bn === normQ ? 0 : bn.startsWith(normQ) ? 1 : 2; return aExact - bExact; }); const resultEl = document.getElementById('req-result'); const btnGo = document.getElementById('btn-go-request'); if (found.length > 0) { const items = found.map(b => `<div class="found-item"><div class="fi-title">${escHtml(b.title)}</div><div class="fi-meta">${escHtml([b.author, b.publisher, b.year].filter(Boolean).join(' · '))} | ${escHtml(b.callNum)}</div></div>`).join(''); resultEl.className = 'req-result found'; resultEl.innerHTML = `📚 이미 <strong>${found.length}권</strong> 있어요! 찾으시는 책이 아니라면 아래 버튼으로 신청해 주세요.<div class="found-list">${items}</div>`; btnGo.classList.add('show'); } else { resultEl.className = 'req-result not-found'; resultEl.innerHTML = `✅ 도서관에 없는 책이에요! 아래 버튼을 눌러 신청해 주세요.`; btnGo.classList.add('show'); } }
+function goRequest() { window.open(REQUEST_URL, '_blank', 'noopener,noreferrer'); }
+function openAdminModal() { const timeEl = document.getElementById('admin-update-time'); try { const saved = parseInt(localStorage.getItem(CACHE_TIME_KEY) || '0'); if (saved) { const d = new Date(saved); const pad = n => String(n).padStart(2, '0'); const str = `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`; timeEl.textContent = str; } else { timeEl.textContent = '정보 없음'; } } catch(_) { timeEl.textContent = '정보 없음'; } document.getElementById('admin-modal').classList.add('open'); }
+function refreshData() { try { localStorage.removeItem(CACHE_KEY); localStorage.removeItem(CACHE_TIME_KEY); } catch (_) {} document.getElementById('admin-modal').classList.remove('open'); document.getElementById('book-list').innerHTML = `<div class="state-box"><div class="icon"><div class="loading-dots"><span></span><span></span><span></span></div></div><div class="msg">최신 도서 목록을 불러오는 중이에요</div></div>`; document.getElementById('stats-bar').style.display = 'none'; allBooks = []; loadBooks(); }
+function closeModalOnBg(event, id) { if (event.target === document.getElementById(id)) { document.getElementById(id).classList.remove('open'); } }
+
+// ─── 🟢 [추가] 북토크 관련 기능 ───────────────────────────────────────────────
+
+function renderBookTalkFeed() {
+  const container = document.getElementById('bt-feed-container');
+  if(dummyBookTalks.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding: 40px 0; color: #666; font-weight: 700;">아직 작성된 피드가 없어요.<br/>첫 번째 독서 피드의 주인공이 되어보세요!</div>`;
+    return;
+  }
+  
+  container.innerHTML = dummyBookTalks.map(talk => {
+    // 별점 그리기 (★ 채운 별, ☆ 빈 별)
+    const stars = '★'.repeat(talk.rating) + '☆'.repeat(5 - talk.rating);
+    
+    return `
+      <div class="bt-card">
+        <div class="bt-book-icon">📕</div>
+        <div class="bt-content">
+          <div class="bt-book-title">${escHtml(talk.title)}</div>
+          <div class="bt-user-info">
+            <span class="bt-stars">${stars}</span> | ${escHtml(talk.age)} | ${escHtml(talk.nickname)}
+          </div>
+          <div class="bt-comment">"${escHtml(talk.comment)}"</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openBookTalkModal() {
+  renderBookTalkFeed();
+  document.getElementById('booktalk-modal').classList.add('open');
+}
+
+function closeBookTalkModal() {
+  document.getElementById('booktalk-modal').classList.remove('open');
+}
+
+function openWriteTalkModal() {
+  // 모달 띄우기 전 입력창 초기화
+  document.getElementById('wt-title').value = '';
+  document.getElementById('wt-nickname').value = '';
+  document.getElementById('wt-age').selectedIndex = 1;
+  document.getElementById('wt-comment').value = '';
+  document.getElementById('star5').checked = true; // 기본 5점
+  
+  document.getElementById('write-talk-modal').classList.add('open');
+}
+
+function closeWriteTalkModal() {
+  document.getElementById('write-talk-modal').classList.remove('open');
+}
+
+function submitBookTalk() {
+  const title = document.getElementById('wt-title').value.trim();
+  const nickname = document.getElementById('wt-nickname').value.trim() || '익명';
+  const age = document.getElementById('wt-age').value;
+  const comment = document.getElementById('wt-comment').value.trim();
+  const rating = parseInt(document.querySelector('input[name="rating"]:checked').value);
+
+  if (!title) { alert('책 제목을 입력해 주세요!'); return; }
+  if (!comment) { alert('기억에 남는 문장이나 소감을 남겨주세요!'); return; }
+
+  const btn = document.getElementById('btn-submit-talk');
+  btn.textContent = "전송 중...";
+  btn.disabled = true;
+
+  // 1초 뒤에 등록 완료되는 것처럼 연출 (프론트엔드 임시 테스트용)
+  setTimeout(() => {
+    // 임시 배열의 맨 앞에 추가
+    dummyBookTalks.unshift({
+      title: title,
+      nickname: nickname,
+      age: age,
+      rating: rating,
+      comment: comment
+    });
+    
+    // 메인 화면 미니 피드도 새로고침
+    if(!document.getElementById('filter-panel').classList.contains('open') && document.getElementById('main-search').value === '') {
+      showInitial();
+    }
+    
+    // 모달 닫고 피드 갱신
+    closeWriteTalkModal();
+    renderBookTalkFeed();
+    
+    btn.textContent = "등록하기";
+    btn.disabled = false;
+    alert('감상이 성공적으로 등록되었습니다!');
+  }, 800);
+  
+  /* [백엔드 연동 시 아래 코드를 사용합니다]
+  const scriptUrl = "여기에_구글_앱스_스크립트_주소를_넣습니다";
+  fetch(scriptUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ title, nickname, age, rating, comment })
+  })
+  .then(res => res.text())
+  .then(data => {
+    // 성공 시 처리 로직
+  });
+  */
+}
+
+loadBooks();
+</script>
 </body>
 </html>
