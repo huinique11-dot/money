@@ -39,18 +39,11 @@
 
     /* ─── HEADER ─── */
     header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--cream);
-      border-bottom: 1.5px solid var(--cream-dark);
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      position: sticky; top: 0; z-index: 100; background: var(--cream);
+      border-bottom: 1.5px solid var(--cream-dark); padding: 12px 16px;
+      display: flex; align-items: center; justify-content: space-between;
       box-shadow: 0 2px 8px rgba(58,46,40,0.06);
     }
-
     .header-left { display: flex; align-items: center; gap: 10px; }
     .header-logo { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--sage-light); }
     .header-logo-placeholder { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--sage), var(--terracotta)); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
@@ -150,7 +143,7 @@
     .modal-handle { width: 36px; height: 4px; background: var(--cream-dark); border-radius: 2px; margin: 0 auto 16px; }
     .modal-title { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 16px; }
 
-    /* ─── REQUEST MODAL & ADMIN MODAL (기존 유지) ─── */
+    /* ─── REQUEST MODAL & ADMIN MODAL (기존) ─── */
     .req-search-row { display: flex; gap: 8px; margin-bottom: 10px; }
     .req-input { flex: 1; padding: 10px 14px; border: 1.5px solid var(--cream-dark); border-radius: 20px; font-family: 'Gowun Batang', serif; font-size: 14px; background: var(--card-bg); outline: none; transition: border-color 0.2s; }
     .req-input:focus { border-color: var(--sage); }
@@ -178,165 +171,54 @@
     
     /* 1. 메인 화면 미니 프리뷰 */
     .mini-booktalk-wrap {
-      margin: 16px 12px 20px;
-      padding: 14px;
-      background: #ffffff;
-      border: 2.5px solid #111;
-      border-radius: 12px;
-      box-shadow: 4px 4px 0px #111;
-      cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.1s;
+      margin: 16px 12px 20px; padding: 14px; background: #ffffff; border: 2.5px solid #111;
+      border-radius: 12px; box-shadow: 4px 4px 0px #111; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s;
     }
-    .mini-booktalk-wrap:active {
-      transform: translate(2px, 2px);
-      box-shadow: 2px 2px 0px #111;
-    }
-    .mini-booktalk-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .mini-booktalk-title {
-      font-weight: 700;
-      font-size: 15px;
-      color: #111;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .mini-booktalk-more {
-      font-size: 12px;
-      font-weight: 700;
-      background: #FFD500;
-      padding: 2px 8px;
-      border: 1.5px solid #111;
-      border-radius: 20px;
-      color: #111;
-    }
+    .mini-booktalk-wrap:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #111; }
+    .mini-booktalk-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .mini-booktalk-title { font-weight: 700; font-size: 15px; color: #111; display: flex; align-items: center; gap: 6px; }
+    .mini-booktalk-more { font-size: 12px; font-weight: 700; background: #FFD500; padding: 2px 8px; border: 1.5px solid #111; border-radius: 20px; color: #111; }
     .mini-booktalk-preview {
-      font-size: 13px;
-      color: #FF4500;
-      font-weight: 700;
-      line-height: 1.4;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      font-size: 13px; color: #FF4500; font-weight: 700; line-height: 1.4;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
     }
-    .mini-booktalk-meta {
-      font-size: 11px;
-      color: #666;
-      margin-top: 6px;
-      font-weight: 700;
-    }
+    .mini-booktalk-meta { font-size: 11px; color: #666; margin-top: 6px; font-weight: 700; }
 
-    /* 2. 북토크 풀스크린 모달 (모달 덮어쓰기) */
-    #booktalk-modal .modal-sheet {
-      background: #f4f4f0;
-      height: 90vh; /* 거의 꽉 찬 화면 */
-      display: flex;
-      flex-direction: column;
-      padding: 0;
-    }
-    .bt-header {
-      padding: 20px 20px 10px;
-      border-bottom: 2.5px solid #111;
-      background: #fff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-radius: 24px 24px 0 0;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
+    /* 2. 북토크 풀스크린 모달 */
+    #booktalk-modal .modal-sheet { background: #f4f4f0; height: 90vh; display: flex; flex-direction: column; padding: 0; }
+    .bt-header { padding: 20px 20px 10px; border-bottom: 2.5px solid #111; background: #fff; display: flex; justify-content: space-between; align-items: center; border-radius: 24px 24px 0 0; position: sticky; top: 0; z-index: 10; }
     .bt-title { font-size: 18px; font-weight: 700; color: #111; }
     .bt-close { font-size: 24px; font-weight: 700; background: none; border: none; cursor: pointer; color: #111; }
     
-    .bt-feed {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      background: #f4f4f0;
-    }
+    .bt-feed { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; background: #f4f4f0; }
     
-    /* 힙한 브루탈리즘 카드 디자인 */
-    .bt-card {
-      background: #fff;
-      border: 2.5px solid #111;
-      box-shadow: 4px 4px 0px #111;
-      display: flex;
-      gap: 12px;
-      padding: 14px;
-      position: relative;
-    }
-    .bt-book-icon {
-      width: 44px;
-      height: 56px;
-      background: #FFD500;
-      border: 2px solid #111;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-    }
+    .bt-card { background: #fff; border: 2.5px solid #111; box-shadow: 4px 4px 0px #111; display: flex; gap: 12px; padding: 14px; position: relative; }
+    .bt-book-icon { width: 44px; height: 56px; background: #FFD500; border: 2px solid #111; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 24px; }
     .bt-content { flex: 1; min-width: 0; }
     .bt-book-title { font-weight: 700; font-size: 15px; color: #111; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .bt-user-info { font-size: 11px; color: #666; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;}
     .bt-stars { color: #FF4500; letter-spacing: 1px; }
     .bt-comment { font-size: 13.5px; font-weight: 700; color: #FF4500; line-height: 1.5; word-break: break-all; }
 
-    /* 글쓰기 플로팅 버튼 */
-    .bt-fab-wrap {
-      padding: 16px;
-      background: #fff;
-      border-top: 2.5px solid #111;
-    }
-    .bt-fab {
-      width: 100%;
-      background: #FFD500;
-      border: 2.5px solid #111;
-      box-shadow: 4px 4px 0px #111;
-      color: #111;
-      font-weight: 700;
-      font-size: 16px;
-      padding: 14px;
-      text-align: center;
-      font-family: 'Gowun Batang', serif;
-      cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.1s;
-    }
+    .bt-fab-wrap { padding: 16px; background: #fff; border-top: 2.5px solid #111; }
+    .bt-fab { width: 100%; background: #FFD500; border: 2.5px solid #111; box-shadow: 4px 4px 0px #111; color: #111; font-weight: 700; font-size: 16px; padding: 14px; text-align: center; font-family: 'Gowun Batang', serif; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s; }
     .bt-fab:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #111; }
 
     /* 3. 북토크 작성 모달 */
     #write-talk-modal .modal-sheet { background: #fff; border: 2.5px solid #111; box-shadow: 0 -4px 0 #111; border-radius: 24px 24px 0 0; }
     .wt-label { font-weight: 700; font-size: 14px; color: #111; margin: 12px 0 6px; display: block; }
-    .wt-input {
-      width: 100%; padding: 12px; border: 2px solid #111; background: #f4f4f0;
-      font-family: 'Gowun Batang', serif; font-size: 14px; color: #111; font-weight: 700; outline: none;
-    }
+    .wt-input { width: 100%; padding: 12px; border: 2px solid #111; background: #f4f4f0; font-family: 'Gowun Batang', serif; font-size: 14px; color: #111; font-weight: 700; outline: none; }
     .wt-input:focus { background: #fff; border-color: #FF4500; }
     .wt-row { display: flex; gap: 10px; }
     .wt-row > div { flex: 1; }
     
-    /* 별점 선택 UI */
     .star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 4px; font-size: 28px; }
     .star-rating input { display: none; }
     .star-rating label { color: #ddd; cursor: pointer; transition: color 0.2s; }
     .star-rating label:hover, .star-rating label:hover ~ label, .star-rating input:checked ~ label { color: #FF4500; }
     
-    .btn-submit-talk {
-      width: 100%; margin-top: 20px; padding: 14px; background: #FF4500; color: #fff;
-      border: 2.5px solid #111; box-shadow: 4px 4px 0px #111; font-family: 'Gowun Batang', serif;
-      font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.1s;
-    }
+    .btn-submit-talk { width: 100%; margin-top: 20px; padding: 14px; background: #FF4500; color: #fff; border: 2.5px solid #111; box-shadow: 4px 4px 0px #111; font-family: 'Gowun Batang', serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.1s; }
     .btn-submit-talk:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #111; }
-
   </style>
 </head>
 <body>
@@ -462,7 +344,6 @@
       <button class="bt-close" onclick="closeBookTalkModal()">&times;</button>
     </div>
     <div class="bt-feed" id="bt-feed-container"></div>
-    
     <div class="bt-fab-wrap">
       <button class="bt-fab" onclick="openWriteTalkModal()">✍️ 나도 북토크 남기기</button>
     </div>
@@ -473,10 +354,8 @@
   <div class="modal-sheet">
     <div class="modal-handle" onclick="closeWriteTalkModal()"></div>
     <div class="modal-title">✍️ 감상 남기기</div>
-    
     <label class="wt-label">어떤 책을 읽으셨나요?</label>
     <input type="text" id="wt-title" class="wt-input" placeholder="책 제목을 적어주세요" />
-    
     <div class="wt-row">
       <div>
         <label class="wt-label">닉네임</label>
@@ -494,7 +373,6 @@
         </select>
       </div>
     </div>
-    
     <div style="display:flex; justify-content:space-between; align-items:center;">
       <label class="wt-label">별점</label>
       <div class="star-rating">
@@ -505,10 +383,8 @@
         <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1점">★</label>
       </div>
     </div>
-    
     <label class="wt-label">기억에 남는 문장이나 소감</label>
     <textarea id="wt-comment" class="wt-input" rows="4" placeholder="자유롭게 적어주세요!" style="resize:none;"></textarea>
-    
     <button class="btn-submit-talk" id="btn-submit-talk" onclick="submitBookTalk()">등록하기</button>
   </div>
 </div>
@@ -518,17 +394,16 @@
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR9wF1ojhJI8CwEpJPjk3xkUiOB5gxTpFtsaKGZ08j-kvksuv9NzJSl_GEp01J15W4uSzRkOUF_P4QP/pub?gid=1825971218&single=true&output=csv';
 const REQUEST_URL = 'https://forms.gle/VZZNRDchkFnrXEjo8';
 
+// 🚀 [백엔드] 선생님이 발급받은 Apps Script 웹 앱 주소
+const BOOKTALK_URL = 'https://script.google.com/macros/s/AKfycbyoDSmdE84pSj5iccD80xeRxLWCzqxDHQCFz9jgHhAY0sh8Ql24BMakiprhWI5Dc9EDkA/exec';
+
 let allBooks = [];
 let isFilterMode = false;
 let lastQuery = '';
 let debounceTimer = null;
 
-// 🟢 [추가] 가상의 북토크 임시 데이터 (나중에 구글 시트에서 불러올 예정)
-let dummyBookTalks = [
-  { title: "고슴도치의 소원", age: "10대", nickname: "가시송송", rating: 5, comment: "\"아무도 우리 집에 찾아오지 않았다\"라는 문장이 마음에 들었습니다. 예전에 친구들과 잘 놀지 못했던 새 학기의 기억이 떠올라서 공감이 많이 갔어요!" },
-  { title: "장미와 나이프", age: "40대", nickname: "추리매니아", rating: 4, comment: "히가시노 게이고 특유의 빠져드는 추리를 짧은 단편 여러 개로 즐길 수 있어서 가볍게 읽기 아주 좋았습니다." },
-  { title: "리플레이", age: "10대", nickname: "야구왕", rating: 5, comment: "해람이가 야구를 하다 다쳐서 생긴 트라우마를 희영이를 통해 극복하는 내용이 감동적이었어요." }
-];
+// 북토크 데이터를 담을 빈 배열 (서버에서 불러옵니다)
+let bookTalks = [];
 
 // ─── CSV PARSER & LOAD ───────────────────────────────────────────────────
 function parseRowSafe(line) {
@@ -601,19 +476,6 @@ async function loadBooks() {
 function showInitial() {
   const listEl = document.getElementById('book-list');
   const total = allBooks.length;
-  
-  // 🟢 [추가] 차트와 검색 결과 사이에 '미니 북토크 프리뷰' 삽입
-  const latestTalk = dummyBookTalks[0];
-  const miniTalkHtml = `
-    <div class="mini-booktalk-wrap" onclick="openBookTalkModal()">
-      <div class="mini-booktalk-header">
-        <div class="mini-booktalk-title">💬 방금 올라온 독서 피드</div>
-        <div class="mini-booktalk-more">전체보기 ➔</div>
-      </div>
-      <div class="mini-booktalk-preview">"${latestTalk.comment}"</div>
-      <div class="mini-booktalk-meta">${latestTalk.title} | ${latestTalk.nickname} 님</div>
-    </div>
-  `;
 
   listEl.innerHTML = `
     <div style="text-align:center;padding:14px 0 10px;font-size:13px;color:var(--text-light)">
@@ -624,13 +486,18 @@ function showInitial() {
       <div class="chart-card" id="chart-aud"><div class="chart-title">👥 대상별</div><div class="chart-svg-wrap"></div><div class="chart-legend"></div></div>
     </div>
     
-    ${miniTalkHtml} <div style="text-align:center;padding:6px 0 0;font-size:11.5px;color:var(--text-light)">
+    <div id="mini-booktalk-container"></div>
+
+    <div style="text-align:center;padding:6px 0 0;font-size:11.5px;color:var(--text-light)">
       검색창에 책 제목이나 저자를 입력해 보세요
     </div>`;
 
   document.getElementById('stats-bar').style.display = 'none';
   renderDonut('chart-kdc', getKdcCounts(), total, true);
   renderDonut('chart-aud', getAudCounts(), total, false);
+  
+  // 초기 렌더링 시 미니 피드도 업데이트 시도
+  updateMiniFeed();
 }
 
 // (Donut chart functions omitted for brevity, keeping existing logic)
@@ -675,18 +542,70 @@ function openAdminModal() { const timeEl = document.getElementById('admin-update
 function refreshData() { try { localStorage.removeItem(CACHE_KEY); localStorage.removeItem(CACHE_TIME_KEY); } catch (_) {} document.getElementById('admin-modal').classList.remove('open'); document.getElementById('book-list').innerHTML = `<div class="state-box"><div class="icon"><div class="loading-dots"><span></span><span></span><span></span></div></div><div class="msg">최신 도서 목록을 불러오는 중이에요</div></div>`; document.getElementById('stats-bar').style.display = 'none'; allBooks = []; loadBooks(); }
 function closeModalOnBg(event, id) { if (event.target === document.getElementById(id)) { document.getElementById(id).classList.remove('open'); } }
 
-// ─── 🟢 [추가] 북토크 관련 기능 ───────────────────────────────────────────────
+// ─── ✨ 구글 시트 기반 북토크 기능 ✨ ───────────────────────────────────────────────
 
+// GET(불러오기)
+async function loadBookTalks() {
+  try {
+    const res = await fetch(BOOKTALK_URL);
+    const data = await res.json();
+    bookTalks = data;
+    
+    // 로드 완료되면 메인 화면의 미니 피드 업데이트
+    updateMiniFeed();
+    
+    // 만약 북토크 모달이 열려있는 상태라면 거기도 업데이트
+    if (document.getElementById('booktalk-modal').classList.contains('open')) {
+      renderBookTalkFeed();
+    }
+  } catch (e) {
+    console.error('북토크 로드 실패:', e);
+  }
+}
+
+// 미니 피드 그리기 (메인 화면)
+function updateMiniFeed() {
+  const miniWrap = document.getElementById('mini-booktalk-container');
+  if (!miniWrap) return;
+
+  if (bookTalks.length === 0) {
+    miniWrap.innerHTML = `
+      <div class="mini-booktalk-wrap" onclick="openBookTalkModal()">
+        <div class="mini-booktalk-header">
+          <div class="mini-booktalk-title">💬 실시간 독서 피드</div>
+          <div class="mini-booktalk-more">전체보기 ➔</div>
+        </div>
+        <div class="mini-booktalk-preview" style="color:#666;">아직 작성된 피드가 없어요. 첫 주인공이 되어보세요!</div>
+      </div>
+    `;
+    return;
+  }
+
+  const latest = bookTalks[0];
+  miniWrap.innerHTML = `
+    <div class="mini-booktalk-wrap" onclick="openBookTalkModal()">
+      <div class="mini-booktalk-header">
+        <div class="mini-booktalk-title">💬 방금 올라온 독서 피드</div>
+        <div class="mini-booktalk-more">전체보기 ➔</div>
+      </div>
+      <div class="mini-booktalk-preview">"${escHtml(latest.comment)}"</div>
+      <div class="mini-booktalk-meta">${escHtml(latest.title)} | ${escHtml(latest.nickname)} 님</div>
+    </div>
+  `;
+}
+
+// 전체 피드 그리기 (모달창 내부)
 function renderBookTalkFeed() {
   const container = document.getElementById('bt-feed-container');
-  if(dummyBookTalks.length === 0) {
+  if(bookTalks.length === 0) {
     container.innerHTML = `<div style="text-align:center; padding: 40px 0; color: #666; font-weight: 700;">아직 작성된 피드가 없어요.<br/>첫 번째 독서 피드의 주인공이 되어보세요!</div>`;
     return;
   }
   
-  container.innerHTML = dummyBookTalks.map(talk => {
-    // 별점 그리기 (★ 채운 별, ☆ 빈 별)
-    const stars = '★'.repeat(talk.rating) + '☆'.repeat(5 - talk.rating);
+  container.innerHTML = bookTalks.map(talk => {
+    // 별점 예외처리 (문자열 방지)
+    const rateNum = parseInt(talk.rating) || 5;
+    const stars = '★'.repeat(rateNum) + '☆'.repeat(5 - rateNum);
     
     return `
       <div class="bt-card">
@@ -718,7 +637,7 @@ function openWriteTalkModal() {
   document.getElementById('wt-nickname').value = '';
   document.getElementById('wt-age').selectedIndex = 1;
   document.getElementById('wt-comment').value = '';
-  document.getElementById('star5').checked = true; // 기본 5점
+  document.getElementById('star5').checked = true;
   
   document.getElementById('write-talk-modal').classList.add('open');
 }
@@ -727,6 +646,7 @@ function closeWriteTalkModal() {
   document.getElementById('write-talk-modal').classList.remove('open');
 }
 
+// POST (보내기)
 function submitBookTalk() {
   const title = document.getElementById('wt-title').value.trim();
   const nickname = document.getElementById('wt-nickname').value.trim() || '익명';
@@ -741,10 +661,22 @@ function submitBookTalk() {
   btn.textContent = "전송 중...";
   btn.disabled = true;
 
-  // 1초 뒤에 등록 완료되는 것처럼 연출 (프론트엔드 임시 테스트용)
-  setTimeout(() => {
-    // 임시 배열의 맨 앞에 추가
-    dummyBookTalks.unshift({
+  // 구글 앱스 스크립트로 보낼 데이터 포맷 만들기
+  const formData = new URLSearchParams();
+  formData.append('title', title);
+  formData.append('nickname', nickname);
+  formData.append('age', age);
+  formData.append('rating', rating);
+  formData.append('comment', comment);
+
+  // 시트로 전송 (fetch)
+  fetch(BOOKTALK_URL, {
+    method: "POST",
+    body: formData
+  })
+  .then(() => {
+    // 앱 화면상에 즉각 반영 (새로고침 없이 빠른 UX 제공)
+    bookTalks.unshift({
       title: title,
       nickname: nickname,
       age: age,
@@ -752,35 +684,26 @@ function submitBookTalk() {
       comment: comment
     });
     
-    // 메인 화면 미니 피드도 새로고침
-    if(!document.getElementById('filter-panel').classList.contains('open') && document.getElementById('main-search').value === '') {
-      showInitial();
-    }
-    
-    // 모달 닫고 피드 갱신
-    closeWriteTalkModal();
+    // UI 갱신
+    updateMiniFeed();
     renderBookTalkFeed();
+    closeWriteTalkModal();
     
     btn.textContent = "등록하기";
     btn.disabled = false;
     alert('감상이 성공적으로 등록되었습니다!');
-  }, 800);
-  
-  /* [백엔드 연동 시 아래 코드를 사용합니다]
-  const scriptUrl = "여기에_구글_앱스_스크립트_주소를_넣습니다";
-  fetch(scriptUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ title, nickname, age, rating, comment })
   })
-  .then(res => res.text())
-  .then(data => {
-    // 성공 시 처리 로직
+  .catch((error) => {
+    console.error('Error:', error);
+    btn.textContent = "등록하기";
+    btn.disabled = false;
+    alert('등록 중 오류가 발생했습니다. 다시 시도해주세요.');
   });
-  */
 }
 
-loadBooks();
+// ─── INIT ─────────────────────────────────────────────────────────
+loadBooks();     // 도서 목록 불러오기
+loadBookTalks(); // 북토크 목록 불러오기
 </script>
 </body>
 </html>
